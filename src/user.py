@@ -8,10 +8,9 @@ def encrypt_password(password):
         return sha256(password.encode()).hexdigest()
 
 def save_user(self):
-        print(f"User {user.username} registered successfully!")
+        print(f"User {self.username} registered successfully!")
         
-class user:
-     
+class User:
         
     def __init__(self, username, password, email, first_name, last_name, dob):
         self.user_id = generate_unique_id()
