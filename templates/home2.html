@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Home</title>
+</head>
+<body>
+    <h1>Welcome, {{ user.username }}</h1>
+
+    <h2>Your Expenses</h2>
+    {% if user.expenses %}
+        <ul>
+            {% for expense in user.expenses %}
+                <li>{{ expense.category }}: ${{ expense.amount }} - {{ expense.description }} on {{ expense.date }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>You haven’t input anything yet.</p>
+    {% endif %}
+    
+    <h2>Add Expense</h2>
+    <form method="post" action="{{ url_for('add_expense') }}">
+        <label for="expense_category">Category:</label>
+        <select name="expense_category" required>
+            {% for category in predefined_categories %}
+                <option value="{{ category.name }}">{{ category.name }}</option>
+            {% endfor %}
+        </select><br>
+        <label for="expense_amount">Amount:</label>
+        <input type="number" name="expense_amount" required><br>
+        <label for="expense_description">Description:</label>
+        <input type="text" name="expense_description"><br>
+        <button type="submit">Add Expense</button>
+    </form>
+</body>
+</html>
+

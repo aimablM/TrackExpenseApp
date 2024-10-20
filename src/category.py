@@ -6,14 +6,34 @@ def generate_unique_id():
 
 
 class Category:
-    def __init__(self, user_id, name, description=""):
+    def __init__(self, name, description=""):
         self.category_id = generate_unique_id()
-        self.user_id = user_id
+        # self.user_id = user_id
         self.name = name
         self.description = description
 
     def display_info(self):
         print(f"Category: {self.name}, Description: {self.description}")
+
+
+predefined_categories = [
+    Category("Gas", "Gas spending"),
+    Category("Groceries", "Food and household items"),
+    Category("Rent", "Monthly rent or mortgage payments"),
+    Category("Utilities", "Electricity, water, internet, etc."),
+    Category("Transportation", "Public transportation or ride services"),
+    Category("Dining Out", "Restaurants and takeout"),
+    Category("Entertainment", "Movies, concerts, and leisure activities"),
+    Category("Health", "Medical bills, prescriptions, and insurance"),
+    Category("Fitness", "Gym memberships or sports activities"),
+    Category("Insurance", "Car, home, health insurance premiums"),
+    Category("Education", "Tuition, books, and educational tools"),
+    Category("Clothing", "Apparel and accessories"),
+    Category("Travel", "Vacation and trip-related expenses"),
+    Category("Subscriptions", "Recurring digital services like Netflix, Spotify"),
+    Category("Gifts", "Presents and charitable donations"),
+    Category("Savings", "Money set aside for savings or investments"),
+]
 
 
 def run_tests():

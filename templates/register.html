@@ -1,26 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up</title>
+  <link rel="stylesheet" href="css/register.css">
 </head>
 <body>
-    <h1>Register</h1>
-    <form method="post">
-        <label for="username">Username:</label>
-        <input type="text" name="username" required><br>
-        <label for="password">Password:</label>
-        <input type="password" name="password" required><br>
-        <label for="email">Email:</label>
-        <input type="email" name="email" required><br>
-        <label for="first_name">First Name:</label>
-        <input type="text" name="first_name" required><br>
-        <label for="last_name">Last Name:</label>
-        <input type="text" name="last_name" required><br>
-        <label for="dob">Date of Birth:</label>
-        <input type="date" name="dob" required><br>
-        <button type="submit">Register</button>
-    </form>
+  <div class="container">
+    <div class="form-box">
+      <h2>Sign up</h2>
+      <form>
+        <div class="input-group">
+          <input type="text" id="first-name" name="first_name" placeholder="First name">
+          <input type="text" id="last-name" name="last_name" class=" last_name" placeholder="Last name">
+        </div>
+        <input type="text" id="username" name="username" placeholder="Username">
+        <input type="email" id="email" name="email" placeholder="Email">
+        <input type="password" id="password" name="password" placeholder="Password">
+        <button type="submit">Create an account</button>
+        <p class="info-text">
+          By clicking "Create account" above, you acknowledge that you will receive updates from the TrackXpense team and that you have read, understood, and agreed to TrackXpense's <a href="#">Terms & Conditions <a href="#">Terms & Conditions</a>, <a href="#">Licensing Agreement</a> and <a href="#">Privacy Policy</a>.
+        </p>
+      </form>
+      <div class="login-link">
+        <p>Already have an account? <a href="#">Log in</a></p>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

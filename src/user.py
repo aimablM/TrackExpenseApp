@@ -1,6 +1,7 @@
 import uuid
 from hashlib import sha256
 from datetime import datetime
+from expense import Expense
 
 
 def generate_unique_id():
@@ -27,8 +28,8 @@ class User:
         self.dob = dob
         self.registration_date = datetime.now()
         self.profile_picture_url = None
-        self.expense = []
         self.budget = None
+        self.expense = []
 
         save_user(self)
 
@@ -57,9 +58,14 @@ class User:
             print(f"Login failed: {e}")
             return False
 
-    def create_expense():
-        # Place Holder
+    def add_expense(self, name, category, amount, description):
+        expense = Expense(self.user_id, name , category, amount, description)
+        self.expense.append(expense)
+        print(f"{name} added to {self.first_name} expenses")
+
+    def delete_expense(self):
         pass
+        
 
     def create_budget():
         # Budget code to be implemented
