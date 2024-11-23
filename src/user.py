@@ -13,7 +13,7 @@ def encrypt_password(password):
 
 
 def save_user(self):
-    print(f"User {self.username} registered successfully!")
+    print(f"User {self.username} created successfully!")
 
 
 class User:
@@ -27,9 +27,8 @@ class User:
         self.last_name = last_name
         self.dob = dob
         self.registration_date = datetime.now()
-        self.profile_picture_url = None
-        self.budget = None
-        self.expense = []
+        # self.budget = None
+        # self.expense = []
 
         save_user(self)
 
@@ -59,13 +58,12 @@ class User:
             return False
 
     def add_expense(self, name, category, amount, description):
-        expense = Expense(self.user_id, name , category, amount, description)
+        expense = Expense(self.user_id, name, category, amount, description)
         self.expense.append(expense)
         print(f"{name} added to {self.first_name} expenses")
 
     def delete_expense(self):
         pass
-        
 
     def create_budget():
         # Budget code to be implemented

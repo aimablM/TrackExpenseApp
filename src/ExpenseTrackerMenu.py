@@ -5,6 +5,8 @@ from category import Category, predefined_categories
 from budget import Budget
 from report import Report
 from visualization import Visualization
+from userRepo import UserRepo
+from expenseRepo import ExpenseRepo
 
 
 def clear_screen():
@@ -35,6 +37,11 @@ class ExpenseTrackerMenu:
     def __init__(self):
         self.user = None
         self.running = True
+        self.user_repo = UserRepo("expense_tracker.db")
+        self.expense_repo = ExpenseRepo("expense_tracker.db")
+        self.current_user = None
+        self.current_user_id = None
+        self.logged_in = False
 
     def register_user(self):
         """Handle user registration"""
@@ -47,7 +54,8 @@ class ExpenseTrackerMenu:
         last_name = get_valid_input("Enter last name: ")
         dob = get_valid_input("Enter date of birth (YYYY-MM-DD): ")
 
-        self.user = User(username, password, email, first_name, last_name, dob)
+        user = User(username, password, email, first_name, last_name, dob)
+        self.user_repo.addUser(user)
         print("\nRegistration successful!")
 
     def login(self):
@@ -56,10 +64,18 @@ class ExpenseTrackerMenu:
         print("-" * 20)
         username = input("Username: ")
         password = input("Password: ")
+        self.current_user = self.user_repo.authenticateUser(username, password)
 
-        if self.user and self.user.login(username, password):
+        if self.current_user:
+            self.current_user_id = self.current_user.user_id
+            print(
+                f"Login Successful {self.current_user.first_name}, ID: {self.current_user_id} !"
+            )
+            self.logged_in = True
             return True
-        return False
+        else:
+            print("Login failed. Please check your username and password.")
+            return False
 
     def add_expense(self):
         """Handle adding new expense"""
@@ -87,12 +103,20 @@ class ExpenseTrackerMenu:
         )
         description = get_valid_input("Enter description: ")
 
-        self.user.add_expense(name, category.name, amount, description)
+        expense = Expense(
+            self.current_user_id, name, category.name, amount, description
+        )
+        self.expense_repo.add_expense(expense)
+
         print("\nExpense added successfully!")
+        self.logged_in_menu()
 
     def view_expenses(self):
         """Display all expenses"""
-        if not self.user.expense:
+
+        current_user_expenses = self.expense_repo.get_expenses(self.current_user_id)
+
+        if not current_user_expenses:
             print("\nNo expenses recorded yet.")
             return
 
@@ -101,7 +125,7 @@ class ExpenseTrackerMenu:
         print(f"{'Name':<15} {'Category':<15} {'Amount':<10} {'Description':<20}")
         print("-" * 60)
 
-        for expense in self.user.expense:
+        for expense in current_user_expenses:
             print(
                 f"{expense.name:<15} {expense.category:<15} ${expense.amount:<9.2f} {expense.description:<20}"
             )
@@ -140,6 +164,39 @@ class ExpenseTrackerMenu:
             else:
                 break
 
+    def logged_in_menu(self):
+        while self.logged_in:
+            try:
+                print_menu(
+                    f"Welcome, {self.current_user.first_name}!",
+                    [
+                        "Add Expense",
+                        "View Expenses",
+                        "Visualize Expenses",
+                        "Logout",
+                        "Exit",
+                    ],
+                )
+                choice = get_valid_input("Select option: ", lambda x: x in "12345")
+
+                if choice == "1":
+                    self.add_expense()
+                elif choice == "2":
+                    self.view_expenses()
+                elif choice == "3":
+                    self.visualize_expenses()
+                elif choice == "4":
+                    self.user = None
+                    self.logged_in = False
+                    print("\nLogged out successfully!")
+                else:
+                    self.running = False
+                    print("\nThank you for using Expense Tracker!")
+                    break
+            except Exception as e:
+                print(f"An error occurred: {e}")
+                continue
+
     def main_menu(self):
         """Main menu loop"""
         while self.running:
@@ -152,36 +209,9 @@ class ExpenseTrackerMenu:
                     self.register_user()
                 elif choice == "2":
                     if self.login():
-                        continue
+                        self.logged_in_menu()
                     else:
                         print("\nLogin failed. Please try again.")
-                else:
-                    self.running = False
-                    print("\nThank you for using Expense Tracker!")
-
-            else:
-                print_menu(
-                    f"Welcome, {self.user.first_name}!",
-                    [
-                        "Add Expense",
-                        "View Expenses",
-                        "Visualize Expenses",
-                        "Logout",
-                        "Exit",
-                    ],
-                )
-
-                choice = get_valid_input("Select option: ", lambda x: x in "12345")
-
-                if choice == "1":
-                    self.add_expense()
-                elif choice == "2":
-                    self.view_expenses()
-                elif choice == "3":
-                    self.visualize_expenses()
-                elif choice == "4":
-                    self.user = None
-                    print("\nLogged out successfully!")
                 else:
                     self.running = False
                     print("\nThank you for using Expense Tracker!")
