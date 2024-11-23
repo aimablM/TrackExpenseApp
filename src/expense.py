@@ -7,15 +7,17 @@ def generate_unique_id():
 
 
 class Expense:
-    def __init__(self, user_id, name, category, amount, description, date=None):
+    def __init__(
+        self, user_id, name, category, amount, description, date=None, expense_id=None
+    ):
 
-        self.expense_id = generate_unique_id()
+        self.expense_id = generate_unique_id() if not expense_id else expense_id
         self.user_id = user_id
         self.name = name
         self.category = category
         self.amount = amount
         self.description = description
-        self.date = datetime.now()
+        self.date = date if date else datetime.now()
 
     def display_info(self):
         print(

@@ -1,6 +1,11 @@
 from databaseConnection import DatabaseConnection
 from user import User
 from user import encrypt_password
+import uuid
+
+
+def generate_unique_id():
+    return str(uuid.uuid4())
 
 
 class UserRepo:
@@ -18,15 +23,17 @@ class UserRepo:
             "SELECT * FROM users WHERE username = ? AND password = ?",
             (username, encrypted_password),
         )
-        record = self.cursor.fetchone()
-        if record:
+        user_data = self.cursor.fetchone()
+        if user_data:
+            # Create User object with existing ID
             user = User(
-                record[1],
-                record[2],
-                record[3],
-                record[4],
-                record[5],
-                record[6],
+                username=user_data[1],
+                password=user_data[2],  # Pass encrypted password directly
+                email=user_data[3],
+                first_name=user_data[4],
+                last_name=user_data[5],
+                dob=user_data[6],
+                user_id=user_data[0],  # Pass existing ID
             )
             return user
         else:

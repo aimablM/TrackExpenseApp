@@ -104,7 +104,7 @@ class ExpenseTrackerMenu:
         description = get_valid_input("Enter description: ")
 
         expense = Expense(
-            self.current_user_id, name, category.name, amount, description
+            self.current_user.user_id, name, category.name, amount, description
         )
         self.expense_repo.add_expense(expense)
 
@@ -113,7 +113,6 @@ class ExpenseTrackerMenu:
 
     def view_expenses(self):
         """Display all expenses"""
-
         current_user_expenses = self.expense_repo.get_expenses(self.current_user_id)
 
         if not current_user_expenses:

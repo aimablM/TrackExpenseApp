@@ -18,8 +18,10 @@ def save_user(self):
 
 class User:
 
-    def __init__(self, username, password, email, first_name, last_name, dob):
-        self.user_id = generate_unique_id()
+    def __init__(
+        self, username, password, email, first_name, last_name, dob, user_id=None
+    ):
+        self.user_id = user_id if user_id else generate_unique_id()
         self.username = username
         self.password = encrypt_password(password)
         self.email = email

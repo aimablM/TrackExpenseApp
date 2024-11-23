@@ -51,24 +51,23 @@ class ExpenseRepo:
             if not user_id:
                 raise ValueError("User ID is required to get expenses")
 
-            self.connection.row_factory = sqlite3.Row
-
             self.cursor.execute("SELECT * FROM expenses WHERE user_id = ?", (user_id,))
             expense_records = self.cursor.fetchall()
-
+            print(expense_records)
             expenses = []
 
             for record in expense_records:
-
-                expense = Expense(
-                    user_id=record["user_id"],
-                    name=record["name"],
-                    category=record["category"],
-                    amount=record["amount"],
-                    description=record["description"],
-                    date=record["date"],
+                expense_item = Expense(
+                    expense_id=record[0],
+                    user_id=record[1],
+                    name=record[2],
+                    category=record[3],
+                    amount=record[4],
+                    description=record[5],
+                    date=record[6],
                 )
-                expenses.append(expense)
+                expenses.append(expense_item)
+                print(expense_item)
             return expenses
 
         except Exception as e:
