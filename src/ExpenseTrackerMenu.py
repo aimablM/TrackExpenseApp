@@ -35,7 +35,6 @@ def get_valid_input(prompt, validation_func=None, error_message=None):
 
 class ExpenseTrackerMenu:
     def __init__(self):
-        self.user = None
         self.running = True
         self.user_repo = UserRepo("expense_tracker.db")
         self.expense_repo = ExpenseRepo("expense_tracker.db")
@@ -169,8 +168,10 @@ class ExpenseTrackerMenu:
                 print_menu(
                     f"Welcome, {self.current_user.first_name}!",
                     [
-                        "Add Expense",
-                        "View Expenses",
+                        "Expense Management",
+                        "Budget Management",
+                        "Account Management",
+                        "Reports & Analystics",
                         "Visualize Expenses",
                         "Logout",
                         "Exit",
@@ -179,15 +180,18 @@ class ExpenseTrackerMenu:
                 choice = get_valid_input("Select option: ", lambda x: x in "12345")
 
                 if choice == "1":
-                    self.add_expense()
+                    self.expense_management()
                 elif choice == "2":
-                    self.view_expenses()
+                    print("To be implemented")
                 elif choice == "3":
-                    self.visualize_expenses()
+                    self.account_management()
                 elif choice == "4":
-                    self.user = None
-                    self.logged_in = False
-                    print("\nLogged out successfully!")
+                    print("To be implemented")
+                elif choice == "5":
+                    self.visualize_expenses()
+                elif choice == "6":
+                    self.log_out()
+                    return
                 else:
                     self.running = False
                     print("\nThank you for using Expense Tracker!")
@@ -196,10 +200,131 @@ class ExpenseTrackerMenu:
                 print(f"An error occurred: {e}")
                 continue
 
+    def expense_management(self):
+        """Expense Management Menu"""
+
+        while self.logged_in:
+            try:
+                print_menu(
+                    f"Expense Management - {self.current_user.first_name}",
+                    [
+                        "Add New Expense",
+                        "View All Expenses",
+                        "Search Expenses",
+                        "Edit Expense",
+                        "Delete Expense",
+                        "View Categories",
+                        "Visualize Expenses",
+                        "Back to Main Menu",
+                    ],
+                )
+                choice = get_valid_input("Select option: ", lambda x: x in "12345678")
+
+                if choice == "1":
+                    self.add_expense()
+                elif choice == "2":
+                    self.view_expenses()
+                elif choice == "3":
+                    self.search_expenses()
+                elif choice == "4":
+                    self.edit_expense()
+                elif choice == "5":
+                    self.delete_expense()
+                elif choice == "6":
+                    self.manage_categories()
+                elif choice == "7":
+                    self.visualize_expenses()
+                elif choice == "8":
+                    break
+            except Exception as e:
+                print(f"An error occurred: {e}")
+                continue
+
+    def search_expenses(self):
+        """Search expenses by various criteria"""
+        try:
+            print_menu(
+                "Search Expenses",
+                [
+                    "Search by Date",
+                    "Search by Category",
+                    "Search by Amount Range",
+                    "Search by Description",
+                    "Back to Expense Menu",
+                ],
+            )
+            choice = get_valid_input("Select search option: ", lambda x: x in "12345")
+            # Implement search logic based on choice
+        except:
+            print("exception handling")
+
+    def edit_expense(self):
+        """Edit existing expense"""
+        try:
+            # Show list of expenses
+            self.view_expenses()
+            expense_id = get_valid_input("Enter expense ID to edit: ")
+            # Implement edit logic
+        except:
+            print("exception handling")
+
+    def delete_expense(self):
+        """Delete existing expense"""
+        try:
+            # Show list of expenses
+            self.view_expenses()
+            expense_id = get_valid_input("Enter expense ID to delete: ")
+            # Implement delete logic with confirmation
+        except:
+            print("exception handling")
+
+    def account_management(self):
+        """Account Management Menu"""
+        while self.logged_in:
+            try:
+                print_menu(
+                    f"Account Management - {self.current_user.first_name}",
+                    [
+                        "View Profile Details",
+                        "Update Personal Information",
+                        "Change Password",
+                        "Notification Settings",
+                        "Export Account Data",
+                        "Delete Account",
+                        "Back to Main Menu",
+                    ],
+                )
+                choice = get_valid_input("Select option: ", lambda x: x in "1234567")
+
+                if choice == "1":
+                    self.view_profile()
+                elif choice == "2":
+                    self.update_personal_info()
+                elif choice == "3":
+                    self.change_password()
+                elif choice == "4":
+                    self.manage_notifications()
+                elif choice == "5":
+                    self.export_account_data()
+                elif choice == "6":
+                    if self.confirm_account_deletion():
+                        self.delete_account()
+                        break
+                elif choice == "7":
+                    break
+            except Exception as e:
+                print(f"")
+
+    def log_out(self):
+        self.current_user = None
+        self.current_user_id = None
+        self.logged_in = False
+        print("\nLogged out successfully!")
+
     def main_menu(self):
         """Main menu loop"""
         while self.running:
-            if not self.user:
+            if not self.current_user:
                 print_menu("Expense Tracker", ["Register", "Login", "Exit"])
 
                 choice = get_valid_input("Select option: ", lambda x: x in "123")

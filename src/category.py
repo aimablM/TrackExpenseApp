@@ -15,6 +15,10 @@ class Category:
     def display_info(self):
         print(f"Category: {self.name}, Description: {self.description}")
 
+    def add_category(self, name, description):
+        Category = Category(name, description)
+        predefined_categories.append(Category)
+
 
 predefined_categories = [
     Category("Gas", "Gas spending"),
@@ -48,5 +52,7 @@ def run_tests():
 
 
 if __name__ == "__main__":
-    run_tests()
-    print("Tests completed")
+    # run_tests()
+    print(predefined_categories)
+    Category.add_category("Food", "Eating out expenses")
+    print("\n" + predefined_categories)
